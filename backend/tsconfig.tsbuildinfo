@@ -1,1 +1,1 @@
-{"root":["./src/app.ts","./src/server.ts"],"version":"5.9.2"}
+{"root":["./src/app.ts","./src/server.ts","./src/config/firebase-admin.ts","./src/config/firebase.ts","./src/middlewares/authmiddleware.ts","./src/routes/post.route.ts","./src/routes/user.route.ts"],"version":"5.9.2"}

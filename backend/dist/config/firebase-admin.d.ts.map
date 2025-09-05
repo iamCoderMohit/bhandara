@@ -1,0 +1,1 @@
+{"version":3,"file":"firebase-admin.d.ts","sourceRoot":"","sources":["../../src/config/firebase-admin.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,gBAAgB,CAAA;AAQlC,eAAO,MAAM,SAAS,EAAE,KAAK,CAAC,IAAI,CAAC,IAAmB,CAAA;AACtD,eAAO,MAAM,EAAE,2BAAoB,CAAA"}

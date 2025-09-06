@@ -1,26 +1,32 @@
 import express from 'express'
-import { setDoc, doc, addDoc, collection } from 'firebase/firestore'
-import { auth, db } from '../config/firebase.js'
 import { verifyToken, type customRequest } from '../middlewares/authMiddleware.js'
+import { db } from '../config/firebase-admin.js'
+import multer from 'multer'
+import { uploadImage } from '../utils/uploadimage.js'
 
 const postRouter = express.Router()
+const upload = multer({storage: multer.memoryStorage()})
 
 postRouter.use(verifyToken as express.RequestHandler)
 
-postRouter.post("/create", async (req, res) => {
+postRouter.post("/create", upload.single("file"), async (req, res) => {
     try {
-        const {address, description, location, media} = req.body
+        const {address, description, location} = req.body
         const userId = (req as customRequest).user.uid
+        const file = req.file
 
-        const post = await addDoc(collection(db, "posts"), {
+        const url = await uploadImage(file)
+
+        const post = await db.collection("posts").add({
             userId,
             address,
             description,
             location,
-            media,
+            media: url,
+            createdAt: new Date(),
             likeCount: 0,
             dislikeCount: 0,
-            createdAt: new Date()
+            commentCount: 0
         })
 
         return res.json({

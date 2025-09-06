@@ -37,7 +37,9 @@ userRouter.post('/signin', async (req, res) => {
 userRouter.get('/me', async (req, res) => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            return res.json(user);
+            return res.json({
+                msg: "you're logged in"
+            });
         }
         else {
             return res.json({

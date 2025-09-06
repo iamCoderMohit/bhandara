@@ -1,4 +1,3 @@
-import { getStorage } from "firebase-admin/storage"
 import { bucket } from "../config/firebase-admin.js"
 
 export async function uploadImage(file: any) {

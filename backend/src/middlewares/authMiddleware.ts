@@ -1,7 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import { authAdmin } from "../config/firebase-admin.js";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../config/firebase.js";
 
 export interface customRequest extends Request{
     user: any
@@ -15,7 +13,6 @@ export async function verifyToken(req: customRequest, res: Response, next: NextF
     try {
         const decoded = await authAdmin.verifyIdToken(token)
         req.user = decoded
-        console.log("token verified")
         next()
     } catch (error) {
         console.error(error)

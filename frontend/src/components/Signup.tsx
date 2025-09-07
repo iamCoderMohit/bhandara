@@ -7,19 +7,19 @@ import { auth } from "../config/firebaseconfig";
 import { Link, useNavigate } from "react-router";
 import Button from "./Button";
 import Toast from "./Toast";
-import { FaCheck } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
+import { FaCheck } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { setUserIsLoggedIn } from "../features/authSlice";
 import { createUser } from "../utils/createUser";
 
-function Signin() {
+function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signin, loading, error } = useAuth();
+  const { signup, loading, error } = useAuth();
+  const [toast, setToast] = useState(false)
   const navigate = useNavigate();
-  const [toast, setToast] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const provider = new GoogleAuthProvider();
 
@@ -27,32 +27,30 @@ function Signin() {
     try {
       const res = await signInWithPopup(auth, provider);
       await createUser(res.user.uid, res.user.email!);
-
-      dispatch(setUserIsLoggedIn(true));
+      dispatch(setUserIsLoggedIn(true))
       navigate("/feed");
     } catch (error) {
       console.error(error);
-      navigate("/signin");
+      navigate("/signup");
     }
   }
-  async function handleSignin() {
-    await signin(email, password);
-    setToast(true);
+
+  async function handleSignup() {
+    try {
+      const res = await signup(email, password);
+    } catch (error) {
+      console.error(error);
+    } finally {
+        setToast(true)
+    }
   }
   return (
     <div>
       <WithBgLayout>
-        {toast ? (
-          <Toast
-            text={error ? error : "successfully signed in"}
-            icon={error ? <IoIosWarning /> : <FaCheck />}
-            status={error ? false : true}
-            setToast={setToast}
-          />
-        ) : null}
+        {toast ? <Toast text={error ? error : "signed up!!"} icon={error ? <IoIosWarning /> : <FaCheck />} status={error ? false : true} setToast={setToast} /> : null}
         <div className="w-100 h-fit  backdrop-blur-lg border bg-[#FFBF78]/30 border-gray-800 rounded-md absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 text-white p-5">
           <h1 className="text-center text-xl font-bold mb-5">
-            Sign in to your account
+            Create your account
           </h1>
 
           <div className="flex flex-col gap-5">
@@ -74,7 +72,7 @@ function Signin() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button handler={handleSignin} text="Sign in" loading={loading} />
+            <Button handler={handleSignup} text="Sign up" loading={loading} />
 
             <h1 className="text-center">OR</h1>
 
@@ -91,9 +89,9 @@ function Signin() {
             </div>
 
             <h1 className="text-center">
-              don't have an account?{" "}
-              <Link to={"/signup"} className="text-blue-900 cursor-pointer">
-                Sign up
+              already have an account?{" "}
+              <Link to={"/signin"} className="text-blue-900 cursor-pointer">
+                Sign in
               </Link>{" "}
               instead{" "}
             </h1>
@@ -104,4 +102,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Signup;

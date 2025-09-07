@@ -1,23 +1,54 @@
-import axios from "axios"
-import { useState } from "react"
+import axios from "axios";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { setUserIsLoggedIn } from "../features/authSlice";
 
-export function useAuth(){
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+export function useAuth() {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
-    const signin = async (email: string, password: string) => {
-        try {
-            setLoading(true)
-            const res = await axios.post(`${BACKEND_URL}/user/signin`, {email, password})
-        } catch (error) {
-            setError("error loggin in")
-        }
+  const signin = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      const res = await axios.post(`${BACKEND_URL}/user/signin`, {
+        email,
+        password,
+      });
+      dispatch(setUserIsLoggedIn(true))
+      navigate('/feed')
+    } catch (error) {
+      setError("error logging in");
+      navigate('/signin')
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return {
-        signin,
-        loading,
-        error
+  const signup = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      const res = await axios.post(`${BACKEND_URL}/user/signup`, {
+        email,
+        password,
+      });
+      dispatch(setUserIsLoggedIn(true))
+      navigate('/feed')
+    } catch (error) {
+      setError("error signing up, try again");
+      navigate('/signup')
+    } finally {
+      setLoading(false);
     }
+  };
+
+  return {
+    signin,
+    signup,
+    loading,
+    error,
+  };
 }

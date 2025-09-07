@@ -1,58 +1,76 @@
 import app from "./app.js";
-import WebSocket, {WebSocketServer} from 'ws'
+import WebSocket, { WebSocketServer } from "ws";
 import { db } from "./config/firebase-admin.js";
 
-const PORT = 3000
+const PORT = 3000;
 
 const server = app.listen(PORT, () => {
-    console.log("app is listneing on port", PORT)
-})
+  console.log("app is listneing on port", PORT);
+});
 
 //initialize a websocket server with the http server
-const wss = new WebSocketServer({server})
+const wss = new WebSocketServer({ server });
 
 //map to store the online users
-const clients = new Map<string, WebSocket>()
+const clients = new Map<string, WebSocket>();
 
 wss.on("connection", (ws, req) => {
-    const userId = new URL(req.url!, "http://localhost").searchParams.get("userId")!
-    clients.set(userId, ws)
+  const userId = new URL(req.url!, "http://localhost").searchParams.get(
+    "userId"
+  )!;
+  clients.set(userId, ws);
 
-    console.log(userId, "connected")
+  console.log(userId, "connected");
 
-    ws.on("message", async (message) => {
-        const data = JSON.parse(message.toString())
+  ws.on("message", async (message) => {
+    try {
+      const data = JSON.parse(message.toString());
 
-        //maybe separate this
-        const chatRef = db.collection("chats").doc(data.chatId);
-        const messageRef = chatRef.collection("messages").doc();
-        await messageRef.set({
-            text: data.text,
-            senderId: data.senderId,
-            receiverId: data.receiverId,
-            timestamp: new Date()
-        });
+      const chatId = [data.senderId, data.receiverId].sort().join("_");
 
-        //send msg to user if online
-        //not fetching from the db because user is online
-        //the fresh data that is in memory can be shown 
-        //to the user right now, its stored in db anyways
-        //its done to store time and resources
+      //maybe separate this
+      const chatRef = db.collection("chats").doc(chatId);
 
-        const receiverWs = clients.get(data.receiverId)
-        if(receiverWs && receiverWs.readyState === ws.OPEN){
-            receiverWs.send(JSON.stringify({
-                id: messageRef.id,
-                ...data,
-                timestamp: new Date()
-            }))
-        }
-    })
+      await chatRef.set(
+        {
+          participants: [data.senderId, data.receiverId],
+          lastMessage: data.text,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
 
-    ws.on("close", () => {
-        clients.delete(userId)
-        console.log(userId, "disconnected")
-    })
-})
+      const messageRef = chatRef.collection("messages").doc();
+      await messageRef.set({
+        text: data.text,
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+        timestamp: new Date(),
+      });
 
-//learn ws deeply
+      //send msg to user if online
+      //not fetching from the db because user is online
+      //the fresh data that is in memory can be shown
+      //to the user right now, its stored in db anyways
+      //its done to store time and resources
+
+      const receiverWs = clients.get(data.receiverId);
+      if (receiverWs && receiverWs.readyState === ws.OPEN) {
+        receiverWs.send(
+          JSON.stringify({
+            id: messageRef.id,
+            ...data,
+            timestamp: new Date(),
+          })
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  ws.on("close", () => {
+    clients.delete(userId);
+    console.log(userId, "disconnected");
+  });
+});

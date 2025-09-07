@@ -1,14 +1,15 @@
-import './App.css'
-import Newpost from './components/Newpost'
-import Signin from './components/Signin'
+import { BrowserRouter, Route, Routes } from "react-router"
+import Home from "./pages/Home"
+import Signin from "./components/Signin"
 
 function App() {
   return (
-    <>
-      <h1>hello world</h1>
-      <Signin />
-      <Newpost />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<Signin />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

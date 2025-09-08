@@ -16,13 +16,13 @@ postRouter.use(verifyToken as express.RequestHandler);
 
 postRouter.post("/create", upload.single("file"), async (req, res) => {
   try {
-    const result = postSchema.safeParse(req.body);
+    // const result = postSchema.safeParse(req.body);
 
-    if (!result.success) {
-      return res.status(401).json({
-        msg: "invalid inputs",
-      });
-    }
+    // if (!result.success) {
+    //   return res.status(401).json({
+    //     msg: "invalid inputs",
+    //   });
+    // }
     const { address, description, location } = req.body;
     const userId = (req as customRequest).user.uid;
     const file = req.file;
@@ -104,7 +104,6 @@ postRouter.get('/all', async (req, res) => {
     try {
         const snapshot = await db.collection("posts").get()
 
-        console.log("reached")
         const posts = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
@@ -119,9 +118,6 @@ postRouter.get('/all', async (req, res) => {
     }
 })
 
-postRouter.get('/test', (req, res) => {
-    res.json({msg: "working"})
-})
 
 //like
 postRouter.put('/like/:id', async (req, res) => {
@@ -162,6 +158,25 @@ postRouter.put('/dislike/:id', async (req, res) => {
   }
 })
 
+//get all posts of one user
+postRouter.get('/getAll', async (req, res) => {
+  try {
+    const uid = (req as customRequest).user.uid
+    const snapshot = await db.collection("posts").where("userId", "==", uid).get()
+
+    const posts = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+
+    return res.json({posts})
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      msg: "cant fetch posts"
+    })
+  }
+})
 
 //getone
 postRouter.get('/:id', async (req, res) => {
@@ -177,5 +192,7 @@ postRouter.get('/:id', async (req, res) => {
         })
     }
 })
+
+
 
 export default postRouter;

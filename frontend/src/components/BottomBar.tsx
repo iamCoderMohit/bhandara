@@ -12,7 +12,9 @@ function BottomBar() {
       >
         <SiBuzzfeed />
       </div>
-      <div className="cursor-pointer">
+      <div className="cursor-pointer"
+      onClick={() => navigate('/upload')}
+      >
         <FaCirclePlus />
       </div>
       <div className="cursor-pointer"

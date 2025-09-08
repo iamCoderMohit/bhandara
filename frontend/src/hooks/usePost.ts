@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setAllPosts, setPosts } from "../features/postSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setAllPosts, setOnePost, setPosts } from "../features/postSlice";
 import { auth } from "../config/firebaseconfig";
 import { useNavigate } from "react-router";
 
@@ -12,6 +12,8 @@ export function usePosts() {
 
   const navigate = useNavigate()
   const dispatch = useDispatch();
+
+  const username = useSelector((state: any) => state.user.userInfo.username)
 
   const getUserPosts = async () => {
     try {
@@ -57,9 +59,10 @@ export function usePosts() {
         setLoading(true)
       const formData = new FormData();
       formData.append("file", file!);
-      formData.append("address", address); //create feed with showing images, and profile page has bugs not showing posts of a user
+      formData.append("address", address);
       formData.append("description", description);
       formData.append("location", JSON.stringify(location));
+      formData.append("username", username);
 
       const res = await axios.post(`${BACKEND_URL}/post/create`, formData, {
         headers: {
@@ -74,10 +77,51 @@ export function usePosts() {
     }
   };
 
+  const getOnePost = async (postId: string) => {
+     try {
+      setLoading(true)
+      const res = await axios.get(`${BACKEND_URL}/post/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`
+        }
+      })
+      dispatch(setOnePost(res.data.post))
+     } catch (error) {
+      setError("cant fetch this post, try again")
+     }
+  }
+
+  const likePost = async (postId: string) => {
+    try {
+      const res = await axios.put(`${BACKEND_URL}/post/like/${postId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`
+        }
+      })
+    } catch (error) {
+      setError("cant like post")
+    }
+  }
+
+  const dislikePost = async (postId: string) => {
+    try {
+      const res = await axios.put(`${BACKEND_URL}/post/dislike/${postId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`
+        }
+      })
+    } catch (error) {
+      setError("cant like post")
+    }
+  }
+
   return {
     getUserPosts,
     getAllPosts,
     uploadPost,
+    likePost,
+    dislikePost,
+    getOnePost,
     postLoading,
     postError,
   };

@@ -5,17 +5,26 @@ import { persistStore } from 'redux-persist'
 import authReducer from '../features/authSlice'
 import userReducer from '../features/userSlice'
 import postReducer from '../features/postSlice'
+import commentReducer from '../features/commentSlice'
 
 const persistConfig = {
     key: 'root',
     storage
 }
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
-    post: postReducer
+    post: postReducer,
+    comment: commentReducer
 })
+
+const rootReducer = (state: any, action: any) => {
+    if(action.type === "RESET"){
+        state = undefined
+    }
+    return appReducer(state, action)
+}
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

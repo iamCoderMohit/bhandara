@@ -23,7 +23,7 @@ postRouter.post("/create", upload.single("file"), async (req, res) => {
     //     msg: "invalid inputs",
     //   });
     // }
-    const { address, description, location } = req.body;
+    const { address, description, location, username } = req.body;
     const userId = (req as customRequest).user.uid;
     const file = req.file;
 
@@ -31,6 +31,7 @@ postRouter.post("/create", upload.single("file"), async (req, res) => {
 
     const post = await db.collection("posts").add({
       userId,
+      username,
       address,
       description,
       location, //change it to geopoints
@@ -125,7 +126,7 @@ postRouter.put('/like/:id', async (req, res) => {
     const postId = req.params.id
 
     await db.collection("posts").doc(postId).update({
-      likes: FieldValue.increment(1)
+      likeCount: FieldValue.increment(1)
     })
 
     return res.json({
@@ -144,7 +145,7 @@ postRouter.put('/dislike/:id', async (req, res) => {
   try {
     const postId = req.params.id
     await db.collection("posts").doc(postId).update({
-      dislikes: FieldValue.increment(1)
+      dislikeCount: FieldValue.increment(1)
     })
 
     return res.json({
@@ -182,7 +183,8 @@ postRouter.get('/getAll', async (req, res) => {
 postRouter.get('/:id', async (req, res) => {
     try {
         const postId = req.params.id
-        const post = await db.collection("posts").doc(postId).get()
+        const snapshot = await db.collection("posts").doc(postId).get()
+        const post = {id: snapshot.id, ...snapshot.data()}
 
         return res.json({post})
     } catch (error) {

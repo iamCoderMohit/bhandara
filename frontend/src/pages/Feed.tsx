@@ -22,8 +22,8 @@ function Feed() {
         <h1 className="text-white font-bold text-2xl">Feed</h1>
       </div>
 
-      <div className="flex flex-col gap-5 overflow-auto w-full h-140">
-        {posts.map((post: any) => <Post showBottom={true} imageUrl={post.media} />)}
+      <div className="flex flex-col gap-10 overflow-auto w-full h-140">
+        {posts.map((post: any) => <Post showBottom={true} imageUrl={post.media} description={post.description} address={post.address} username={post.username} likes={post.likeCount} dislikes={post.dislikeCount} postId={post.id}/>)}
       </div>
     </OptionLayout>
   )

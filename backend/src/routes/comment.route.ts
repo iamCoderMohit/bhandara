@@ -84,4 +84,25 @@ commentRouter.post("/reply", async (req, res) => {
   }
 });
 
+
+//get all comments of a post
+
+commentRouter.get("/all/:id", async (req, res) => {
+  try {
+    const postId = req.params.id
+    const snapshot = await db.collection("posts").doc(postId).collection("comments").get()
+
+    const comments = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+
+    return res.json({comments})
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "error fetching comments"
+    })
+  }
+})
 export default commentRouter;

@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { useSelector } from "react-redux";
 import Profile from "./pages/Profile";
 import Upload from "./pages/Upload";
+import Post from "./pages/Post";
 
 function App() {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
@@ -20,6 +21,7 @@ function App() {
           <Route path="/feed" element={<Feed />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/post/:id" element={<Post />} />
         </Route>
       </Routes>
     </BrowserRouter>

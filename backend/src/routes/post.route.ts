@@ -119,6 +119,26 @@ postRouter.get('/all', async (req, res) => {
     }
 })
 
+//all posts of one user
+postRouter.get('/userPosts/:id', async (req, res) => {
+  try {
+    const userId = req.params.id
+    const snapshot = await db.collection("posts").where("userId", "==", userId).get()
+
+    const posts = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+
+    return res.json({posts})
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      msg: "cant fetch posts"
+    })
+  }
+})
+
 
 //like
 postRouter.put('/like/:id', async (req, res) => {

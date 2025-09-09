@@ -10,7 +10,7 @@ import Toast from "./Toast";
 import { IoIosWarning } from "react-icons/io";
 import { FaCheck } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { setUserIsLoggedIn } from "../features/authSlice";
+import { setCurrentUserInfo, setUserIsLoggedIn } from "../features/authSlice";
 import { createUser } from "../utils/createUser";
 
 function Signup() {
@@ -27,7 +27,8 @@ function Signup() {
     try {
       const res = await signInWithPopup(auth, provider);
       await createUser(res.user.uid, res.user.email!);
-      dispatch(setUserIsLoggedIn(true))
+      dispatch(setUserIsLoggedIn(true),
+      dispatch(setCurrentUserInfo(res.user.uid))) 
       navigate("/feed");
     } catch (error) {
       console.error(error);

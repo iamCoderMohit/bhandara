@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../config/firebaseconfig";
@@ -6,11 +6,13 @@ import { setUserIsLoggedIn } from "../features/authSlice";
 import { IoReloadCircle } from "react-icons/io5";
 import { usePosts } from "../hooks/usePost";
 import { persistor } from "../store/store";
+import { IoIosChatbubbles } from "react-icons/io";
 
 function Navbar() {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
   const dispatch = useDispatch()
   const {getAllPosts, postLoading, postError} = usePosts()
+  const navigate = useNavigate()
 
   async function handleClick() {
     await getAllPosts()
@@ -33,6 +35,11 @@ function Navbar() {
 
         {isLoggedIn && (
           <div className="flex items-center gap-5">
+            <div className="text-white text-3xl cursor-pointer"
+            onClick={() => navigate(`/chat`)}
+            >
+              <IoIosChatbubbles />
+            </div>
             <div className="text-white text-3xl cursor-pointer"
             onClick={handleClick}
             >

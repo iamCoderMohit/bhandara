@@ -7,6 +7,7 @@ import {
 import { auth } from "../config/firebase.js";
 import { userSchema } from "../zodTypes/user.schema.js";
 import { db } from "../config/firebase-admin.js";
+import { FieldValue } from "firebase-admin/firestore";
 
 const userRouter = express.Router();
 
@@ -30,13 +31,13 @@ userRouter.post("/signup", async (req, res) => {
 
     const newUser = await db.collection("users").doc(user.uid).set({
       email: user.email,
-      followers: 0,
-      following: 0,
+      followers: [],
+      following: [],
       createdAt: new Date(),
     });
 
     return res.json({
-      user: newUser,
+      user: user.uid,
     });
   } catch (error) {
     console.error(error);
@@ -79,10 +80,12 @@ userRouter.put("/edit", async (req, res) => {
       username,
       fullName,
       bio,
+      followers: [],
+      following: []
     });
 
     const userDoc = await db.collection("users").doc(uid).get();
-    const user = userDoc.data()
+    const user = {id: userDoc.id, ...userDoc.data()}
 
     return res.json({
       user,
@@ -109,5 +112,73 @@ userRouter.get("/me", async (req, res) => {
     }
   });
 });
+
+//get one user
+userRouter.get('/:id', async (req, res) => {
+  try {
+    const userId = req.params.id
+
+    const snapshot = await db.collection("users").doc(userId).get()
+
+    const user = {id: snapshot.id, ...snapshot.data()}
+
+    return res.json({user})
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "error fetching user"
+    })
+  }
+})
+
+//follow a person
+userRouter.put("/follow/:userId", async (req, res) => {
+  try {
+    const userId= req.params.userId
+    const {newFollower} = req.body
+
+    await db.collection("users").doc(userId).update({
+      followers: FieldValue.arrayUnion(newFollower)
+    })
+
+    await db.collection("users").doc(newFollower).update({
+      following: FieldValue.arrayUnion(userId)
+    })
+
+    res.json({
+      msg: "followed"
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "cant follow try again"
+    })
+  }
+})
+
+//unfollow a person
+userRouter.put("/unfollow/:userId", async (req, res) => {
+  try {
+    const userId= req.params.userId
+    const {unfollower} = req.body
+
+    await db.collection("users").doc(userId).update({
+      followers: FieldValue.arrayRemove(unfollower)
+    })
+
+    await db.collection("users").doc(unfollower).update({
+      following: FieldValue.arrayRemove(userId)
+    })
+
+    res.json({
+      msg: "unfollowed"
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      msg: "cant unfollow try again"
+    })
+  }
+})
 
 export default userRouter;

@@ -115,6 +115,22 @@ export function usePosts() {
     }
   }
 
+  const [newUserPosts, setNewUserPosts] = useState([])
+
+  const getNewUserPost = async (userId: string) => {
+    try {
+      setLoading(true)
+      const res = await axios.get(`${BACKEND_URL}/post/userPosts/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`
+        }
+      })
+      setNewUserPosts(res.data.posts)
+    } catch (error) {
+      setError("cant fetch posts, try again")
+    }
+  }
+
   return {
     getUserPosts,
     getAllPosts,
@@ -122,6 +138,8 @@ export function usePosts() {
     likePost,
     dislikePost,
     getOnePost,
+    getNewUserPost,
+    newUserPosts,
     postLoading,
     postError,
   };

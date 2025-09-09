@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import Profile from "./pages/Profile";
 import Upload from "./pages/Upload";
 import Post from "./pages/Post";
+import User from "./pages/User";
+import Chat from "./pages/Chat";
 
 function App() {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
@@ -22,6 +24,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/post/:id" element={<Post />} />
+          <Route path="/user/:id" element={<User />} />
+          <Route path="/chat" element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>

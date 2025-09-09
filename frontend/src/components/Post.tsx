@@ -3,6 +3,7 @@ import { FaComment, FaRegComment, FaUserCircle } from "react-icons/fa";
 import { usePosts } from "../hooks/usePost";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import UserCard from "./UserCard";
 
 interface postProps {
   imageUrl?: string;
@@ -13,6 +14,7 @@ interface postProps {
   likes: number;
   dislikes: number;
   postId: string;
+  userId: string
 }
 
 function Post({
@@ -24,6 +26,7 @@ function Post({
   likes,
   dislikes,
   postId,
+  userId
 }: postProps) {
   const { likePost, getAllPosts, dislikePost, getOnePost } = usePosts();
   const [liked, setLiked] = useState(false);
@@ -51,14 +54,7 @@ function Post({
   }
   return (
     <div className={`flex flex-col mx-auto ${showBottom ? "w-[60%]" : "w-40"}`}>
-      <div className="flex items-center gap-3 mb-3">
-        <div className="text-white text-3xl">
-          <FaUserCircle />
-        </div>
-        <h1 className="text-white cursor-pointer">
-          @{username ? username : "anonymus"}
-        </h1>
-      </div>
+    <UserCard username={username!} userId={userId} />
       <div
         className={`flex justify-center items-center cursor-pointer`}
         onClick={() => (navigate(`/post/${postId}`), handleGetOnePost())}

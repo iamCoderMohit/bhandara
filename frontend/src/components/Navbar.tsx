@@ -16,7 +16,7 @@ function Navbar() {
     await getAllPosts()
   }
   return (
-    <div className="flex items-center justify-around px-20 py-4">
+    <div className="flex items-center justify-around px-20 py-4 h-20">
       <div>
         <Link to={"/"}>
           <img src={logo} width={200} className="cursor-pointer" alt="logo" />

@@ -1,18 +1,19 @@
 import axios from "axios"
 import { auth } from "../config/firebaseconfig"
 import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setPostComments } from "../features/commentSlice"
 
 export function useComment(){
     const [commentError, setCommentError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
+    const username = useSelector((state: any) => state.user.userInfo.username)
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
     const postComment = async (content: string, postId: string) => {
         try {
-            const res = await axios.post(`${BACKEND_URL}/comment/create/${postId}`, {content}, {
+            const res = await axios.post(`${BACKEND_URL}/comment/create/${postId}`, {content, username}, {
                 headers: {
                     Authorization: `Bearer ${await auth.currentUser?.getIdToken()}`
                 }

@@ -20,8 +20,8 @@ commentRouter.post("/create/:id", async (req, res) => {
       return res.status(401).json({
         msg: "invalid comment type",
       });
-    }
-    const { content } = req.body;
+    } //user id not sent or somethiong is fishy 
+    const { content, username } = req.body;
     const postId = req.params.id;
     const userId = (req as unknown as customRequest).user.uid;
 
@@ -31,6 +31,7 @@ commentRouter.post("/create/:id", async (req, res) => {
       .collection("comments")
       .add({
         userId: userId,
+        username,
         content,
         createdAt: new Date(),
       });
@@ -46,6 +47,36 @@ commentRouter.post("/create/:id", async (req, res) => {
   }
 });
 
+//get all replies of a comment
+commentRouter.get("/reply", async (req, res) => {
+  try {
+    const {postId, commentId} = req.query
+
+    const postIdStr = postId as string
+    const commentIdStr = commentId as string
+
+    const snapshot = await db
+      .collection("posts")
+      .doc(postIdStr)
+      .collection("comments")
+      .doc(commentIdStr)
+      .collection("replies")
+      .get();
+
+    const replies = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return res.json({ replies });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      msg: "error fetching replies",
+    });
+  }
+});
+
 //reply to a comment
 commentRouter.post("/reply", async (req, res) => {
   try {
@@ -57,7 +88,7 @@ commentRouter.post("/reply", async (req, res) => {
       });
     }
 
-    const { replyToUserId, commentId, postId, content } = req.body;
+    const { replyToUserId, commentId, postId, content, username } = req.body;
     const authorId = (req as customRequest).user.uid;
 
     await db
@@ -69,6 +100,7 @@ commentRouter.post("/reply", async (req, res) => {
       .add({
         userId: authorId,
         replyToUserId,
+        username,
         content,
         createdAt: new Date(),
       });
@@ -84,25 +116,31 @@ commentRouter.post("/reply", async (req, res) => {
   }
 });
 
-
 //get all comments of a post
 
 commentRouter.get("/all/:id", async (req, res) => {
   try {
-    const postId = req.params.id
-    const snapshot = await db.collection("posts").doc(postId).collection("comments").get()
+    const postId = req.params.id;
+    const snapshot = await db
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .get();
 
-    const comments = snapshot.docs.map(doc => ({
+    const comments = snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
-    }))
+      ...doc.data(),
+    }));
 
-    return res.json({comments})
+    return res.json({ comments });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(500).json({
-      msg: "error fetching comments"
-    })
+      msg: "error fetching comments",
+    });
   }
-})
+});
+
+
+
 export default commentRouter;

@@ -10,9 +10,10 @@ function Profile() {
   const [edit, setEdit] = useState(false);
   const userInfo = useSelector((state: any) => state.user.userInfo);
   const posts = useSelector((state: any) => state.post.posts);
+  
   return (
     <div>
-      {edit && (
+      {edit || userInfo.length === 0 && (
         <Overlay>
           <EditDetails setEdit={setEdit} />
         </Overlay>

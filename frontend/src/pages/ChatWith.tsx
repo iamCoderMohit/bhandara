@@ -30,7 +30,7 @@ function ChatWith() {
       <div className="w-[90%] mx-auto mt-4 h-[80%]">
         <UserCard userId={id!} username={user.username} />
         <div className="w-full h-full relative">
-          <div className=" flex justify-between items-center w-full gap-3 absolute z-10 bottom-0 ">
+          <div className=" flex flex-row-reverse justify-between items-center w-full gap-3 absolute z-10 bottom-0 ">
             <input
               type="text"
               className="border border-white py-3 w-full pl-3 text-white focus:outline-0 rounded-full"

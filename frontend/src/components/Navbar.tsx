@@ -7,15 +7,21 @@ import { IoReloadCircle } from "react-icons/io5";
 import { usePosts } from "../hooks/usePost";
 import { persistor } from "../store/store";
 import { IoIosChatbubbles } from "react-icons/io";
+import { useInfo } from "../hooks/useInfo";
 
 function Navbar() {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-  const dispatch = useDispatch()
-  const {getAllPosts, postLoading, postError} = usePosts()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const { getAllPosts, postLoading, postError } = usePosts();
+  const navigate = useNavigate();
 
   async function handleClick() {
-    await getAllPosts()
+    await getAllPosts();
+  }
+  const {getCurrentUserInfo} = useInfo()
+
+  async function rehydrateUserInfo() {
+    await getCurrentUserInfo()
   }
   return (
     <div className="flex items-center justify-around px-20 py-4 h-20">
@@ -35,31 +41,39 @@ function Navbar() {
 
         {isLoggedIn && (
           <div className="flex items-center gap-5">
-            <div className="text-white text-3xl cursor-pointer"
-            onClick={() => navigate(`/chat`)}
+            <div
+              className="text-white text-3xl cursor-pointer"
+              onClick={() => (
+                rehydrateUserInfo(),
+                navigate(`/chat`)
+              )}
             >
               <IoIosChatbubbles />
             </div>
-            <div className="text-white text-3xl cursor-pointer"
-            onClick={handleClick}
+            <div
+              className="text-white text-3xl cursor-pointer"
+              onClick={handleClick}
             >
               <IoReloadCircle />
             </div>
 
             <Link to={"/feed"}>
-            <button className="text-white font-cream font-semibold bg-orange-600 px-5 py-1 rounded-md cursor-pointer">
-              Feed
-            </button>
-          </Link>
+              <button className="text-white font-cream font-semibold bg-orange-600 px-5 py-1 rounded-md cursor-pointer">
+                Feed
+              </button>
+            </Link>
 
-          <button className="text-white bg-blue-600 py-1 px-5 rounded-md cursor-pointer"
-          onClick={() => {
-            auth.signOut(),
-            dispatch({type: "RESET"}),
-            persistor.purge(),
-            dispatch(setUserIsLoggedIn(false))
-          }}
-          >Logout</button>
+            <button
+              className="text-white bg-blue-600 py-1 px-5 rounded-md cursor-pointer"
+              onClick={() => {
+                auth.signOut(),
+                  dispatch({ type: "RESET" }),
+                  persistor.purge(),
+                  dispatch(setUserIsLoggedIn(false));
+              }}
+            >
+              Logout
+            </button>
           </div>
         )}
       </div>

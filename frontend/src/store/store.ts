@@ -6,6 +6,7 @@ import authReducer from '../features/authSlice'
 import userReducer from '../features/userSlice'
 import postReducer from '../features/postSlice'
 import commentReducer from '../features/commentSlice'
+import friendReducer from '../features/friendSlice'
 
 const persistConfig = {
     key: 'root',
@@ -16,7 +17,8 @@ const appReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     post: postReducer,
-    comment: commentReducer
+    comment: commentReducer,
+    friend: friendReducer
 })
 
 const rootReducer = (state: any, action: any) => {

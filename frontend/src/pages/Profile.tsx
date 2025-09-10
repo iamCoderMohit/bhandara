@@ -55,11 +55,11 @@ function Profile() {
             <div className="flex gap-10 justify-center">
               <div>
                 <h1>Followers</h1>
-                <h1 className="text-center">{userInfo.followers}</h1>
+                <h1 className="text-center">{userInfo.followers?.length ?? 0}</h1>
               </div>
               <div>
                 <h1>Following</h1>
-                <h1 className="text-center">{userInfo.following}</h1>
+                <h1 className="text-center">{userInfo.following?.length ?? 0}</h1>
               </div>
             </div>
           </div>

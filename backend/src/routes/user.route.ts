@@ -8,6 +8,7 @@ import { auth } from "../config/firebase.js";
 import { userSchema } from "../zodTypes/user.schema.js";
 import { db } from "../config/firebase-admin.js";
 import { FieldValue } from "firebase-admin/firestore";
+import { verifyToken, type customRequest } from "../middlewares/authMiddleware.js";
 
 const userRouter = express.Router();
 
@@ -98,19 +99,19 @@ userRouter.put("/edit", async (req, res) => {
   }
 });
 
-userRouter.get("/me", async (req, res) => {
-  const token = await auth.currentUser?.getIdToken();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      return res.json({
-        token,
-      });
-    } else {
-      return res.json({
-        msg: "you're logged out",
-      });
-    }
-  });
+userRouter.get("/me", verifyToken, async (req, res) => {
+  try {
+    const uid = (req as customRequest).user.uid
+    const snapshot = await db.collection("users").doc(uid).get()
+    const user = {id: snapshot.id, ...snapshot.data()}
+
+    return res.json({user})
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      msg: "cant fetch user"
+    })
+  }
 });
 
 //get one user

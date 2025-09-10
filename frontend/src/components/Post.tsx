@@ -14,7 +14,8 @@ interface postProps {
   likes: number;
   dislikes: number;
   postId: string;
-  userId: string
+  userId: string,
+  commentCount: number
 }
 
 function Post({
@@ -26,7 +27,8 @@ function Post({
   likes,
   dislikes,
   postId,
-  userId
+  userId,
+  commentCount
 }: postProps) {
   const { likePost, getAllPosts, dislikePost, getOnePost } = usePosts();
   const [liked, setLiked] = useState(false);
@@ -92,7 +94,7 @@ function Post({
           <button className="text-xl">
             <FaRegComment />
           </button>
-          <h1>{"comment count"}</h1>
+          <h1>{commentCount ? commentCount : 0}</h1>
         </div>
       </div>
 

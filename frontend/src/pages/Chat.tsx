@@ -1,9 +1,27 @@
+import { useEffect } from "react"
 import OptionLayout from "../components/OptionLayout"
+import { useFollow } from "../hooks/useFollow"
+import { useSelector } from "react-redux"
+import ChatCard from "../components/ChatCard"
 
 function Chat() {
+  const {getFollowingUser} = useFollow()
+  useEffect(() => {
+    async function fetch() {
+      await getFollowingUser()
+    }
+
+    fetch()
+  }, [])
+
+  const following = useSelector((state: any) => state.friend.followingUsers)
+
   return (
     <OptionLayout>
-        //show the persons you are following here and then implement chat
+      <h1 className="text-white font-semibold text-2xl">Chat</h1>
+        <div className="flex flex-col items-center mt-5">
+          {following.map((user: any) => <ChatCard name={user.fullName} userId={user.id} />)}
+        </div>
     </OptionLayout>
   )
 }

@@ -10,6 +10,7 @@ import Upload from "./pages/Upload";
 import Post from "./pages/Post";
 import User from "./pages/User";
 import Chat from "./pages/Chat";
+import ChatWith from "./pages/ChatWith";
 
 function App() {
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
@@ -26,6 +27,7 @@ function App() {
           <Route path="/post/:id" element={<Post />} />
           <Route path="/user/:id" element={<User />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:id" element={<ChatWith />} />
         </Route>
       </Routes>
     </BrowserRouter>

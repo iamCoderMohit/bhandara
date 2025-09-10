@@ -6,6 +6,7 @@ import {
   verifyToken,
   type customRequest,
 } from "../middlewares/authMiddleware.js";
+import { FieldValue } from "firebase-admin/firestore";
 
 const commentRouter = express.Router();
 
@@ -35,6 +36,10 @@ commentRouter.post("/create/:id", async (req, res) => {
         content,
         createdAt: new Date(),
       });
+
+      await db.collection("posts").doc(postId).update({
+        commentCount: FieldValue.increment(1)
+      })
 
     return res.json({
       comment,

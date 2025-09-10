@@ -103,7 +103,7 @@ postRouter.delete('/delete/:id', async (req, res) => {
 //getall
 postRouter.get('/all', async (req, res) => {
     try {
-        const snapshot = await db.collection("posts").get()
+        const snapshot = await db.collection("posts").orderBy("createdAt", "asc").get()
 
         const posts = snapshot.docs.map(doc => ({
             id: doc.id,

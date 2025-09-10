@@ -1,5 +1,4 @@
 node_modules
-firebase.ts
 serviceAccountKey.json
 
 dist

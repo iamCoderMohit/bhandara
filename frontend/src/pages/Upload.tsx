@@ -36,7 +36,7 @@ function Upload() {
       <h1 className="text-white font-semibold text-lg">
         Tell others what you see nearby
       </h1>
-      <div className="text-white p-4 overflow-auto h-120 md:h-140 flex flex-col gap-5">
+      <div className="text-white p-4 overflow-auto h-[90%] md:h-140 flex flex-col gap-5">
         <div className="flex flex-col">
           <label htmlFor="" className="text-lg">
             Upload proof of bhandara*

@@ -27,9 +27,9 @@ function ChatWith() {
 
   return (
     <OptionLayout>
-      <div className="w-[90%] mx-auto mt-4 h-[80%]">
+      <div className="w-[90%] mx-auto mt-4 h-[80%] bg-red-400">
         <UserCard userId={id!} username={user.username} />
-        <div className="w-full h-full relative bg-red-400">
+        <div className="w-full h-full relative">
           <div className=" flex justify-between items-center w-full gap-3 absolute z-10 bottom-0 ">
             <input
               type="text"

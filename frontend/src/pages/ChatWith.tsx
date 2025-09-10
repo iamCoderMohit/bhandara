@@ -22,15 +22,18 @@ function ChatWith() {
     sendMessage(id!, text);
   }
 
+  const [test, setTest] = useState(false)
+
   const chatId = [myId, id].sort().join("_");
   const messages = useMessages(chatId);
 
   return (
     <OptionLayout>
       <div className="w-[90%] mx-auto mt-4 h-[80%]">
+        {test ? <div className="bg-red-600">this is test div</div> : null }
         <UserCard userId={id!} username={user.username} />
         <div className="w-full h-full relative">
-          <div className=" flex flex-row-reverse justify-between items-center w-full gap-3 absolute z-10 bottom-0 ">
+          <div className="flex justify-between items-center w-full gap-3 absolute z-10 bottom-0 ">
             <input
               type="text"
               className="border border-white py-3 w-full pl-3 text-white focus:outline-0 rounded-full"
@@ -38,7 +41,10 @@ function ChatWith() {
             />
             <div
               className="text-white bg-gray-800 p-3 rounded-full w-fit cursor-pointer text-3xl"
-              onClick={handleSend}
+              onClick={() => {
+                handleSend;
+                setTest(prev => !prev)
+              }}
             >
               <IoSend />
             </div>

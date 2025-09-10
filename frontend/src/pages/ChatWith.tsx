@@ -44,7 +44,7 @@ function ChatWith() {
             </div>
           </div>
 
-          <div className="text-white flex flex-col gap-2">
+          <div className="text-white flex flex-col gap-2 h-[90%] overflow-auto">
             {messages.map((msg) => (
               <div
                 key={msg.id}

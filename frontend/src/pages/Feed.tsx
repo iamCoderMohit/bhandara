@@ -26,7 +26,7 @@ function Feed() {
         <Link className="bg-blue-700 py-2 px-5 rounded-md cursor-pointer mx-auto" to={'/profile'}>Edit</Link>
       </div> :  <div>
         <div>
-        <h1 className="text-white font-bold text-2xl">Feed</h1>
+        <h1 className="text-white font-bold text-2xl pl-5">Feed</h1>
       </div>
 
       <div className="flex flex-col gap-10 overflow-auto w-full h-140">

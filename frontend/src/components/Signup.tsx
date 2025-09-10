@@ -38,7 +38,7 @@ function Signup() {
 
   async function handleSignup() {
     try {
-      const res = await signup(email, password);
+      await signup(email, password);
     } catch (error) {
       console.error(error);
     } finally {

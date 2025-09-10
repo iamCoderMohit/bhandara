@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useInfo } from "../hooks/useInfo";
 import UserCard from "./UserCard";
 import Button from "./Button";
@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useFollow } from "../hooks/useFollow";
 
 function UserDetails({ userId }: { userId: string }) {
-  const { getUserInfo, userInfo, loading, error } = useInfo();
+  const { getUserInfo, userInfo } = useInfo();
   const myId = useSelector((state: any) => state.user.userInfo.id);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function UserDetails({ userId }: { userId: string }) {
     fetch();
   }, [useInfo, myId]);
 
-  const { followUser, unfollowUser, followLoading, followError } = useFollow();
+  const { followUser, unfollowUser, followLoading } = useFollow();
   const followed = userInfo?.followers?.includes(myId) ?? false;
 
 
@@ -32,7 +32,7 @@ function UserDetails({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="flex w-1/2 mx-auto gap-10">
+    <div className="flex ml-4 md:w-1/2 mx-auto gap-10">
       <div>
         <UserCard username={userInfo.username} userId={userId} />
         <h1 className="text-white">{userInfo.bio}</h1>

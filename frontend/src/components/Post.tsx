@@ -1,5 +1,5 @@
 import { AiFillDislike, AiFillLike } from "react-icons/ai";
-import { FaComment, FaRegComment, FaUserCircle } from "react-icons/fa";
+import {  FaRegComment } from "react-icons/fa";
 import { usePosts } from "../hooks/usePost";
 import { useState } from "react";
 import { useNavigate } from "react-router";

@@ -19,6 +19,7 @@ function Chat() {
   return (
     <OptionLayout>
       <h1 className="text-white font-semibold text-2xl">Chat</h1>
+      <h1 className="text-green-600">Currently you can only send messages to the users you are following, and if you don't see user here after following please refresh the page (site is still under construction)</h1>
         <div className="flex flex-col items-center mt-5">
           {following.map((user: any) => <ChatCard name={user.fullName} userId={user.id} />)}
         </div>

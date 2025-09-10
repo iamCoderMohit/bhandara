@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 function BottomBar() {
     const navigate = useNavigate()
   return (
-    <div className="py-3 w-full backdrop-blur-2xl absolute bottom-0 border border-t-white text-white flex justify-around items-center text-3xl">
+    <div className="py-3 w-full backdrop-blur-2xl absolute bottom-0  text-white flex justify-around items-center text-3xl">
       <div className="cursor-pointer"
       onClick={() => navigate('/feed')}
       >

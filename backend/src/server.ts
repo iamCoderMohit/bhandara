@@ -20,7 +20,6 @@ wss.on("connection", (ws, req) => {
   )!;
   clients.set(userId, ws);
 
-  console.log(userId, "connected");
 
   ws.on("message", async (message) => {
     try {
@@ -71,6 +70,5 @@ wss.on("connection", (ws, req) => {
 
   ws.on("close", () => {
     clients.delete(userId);
-    console.log(userId, "disconnected");
   });
 });

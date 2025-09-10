@@ -28,7 +28,7 @@ function Post() {
   }
   return (
     <OptionLayout>
-      <div className="text-white flex flex-col mx-auto w-[60%] h-[calc(100vh-170px)]">
+      <div className="text-white flex flex-col mx-auto w-[60%] h-[calc(100vh-170px)] mt-10">
         <img src={post.media} width={500} alt="" className="object-contain" />
 
         <div className="mt-3 flex-1 overflow-y-auto">

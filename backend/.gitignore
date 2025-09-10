@@ -3,3 +3,4 @@ firebase.ts
 serviceAccountKey.json
 
 dist
+.env

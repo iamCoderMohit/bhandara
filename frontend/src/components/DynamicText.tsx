@@ -20,7 +20,7 @@ export default function DynamicText() {
   }, [lines.length]);
 
   return (
-    <div className="overflow-hidden h-10 flex items-center justify-center font-mono mt-5">
+    <div className="overflow-hidden md:h-10 h-30 flex items-center justify-center font-mono mt-5">
       <AnimatePresence mode="wait">
         <motion.p
           key={index}

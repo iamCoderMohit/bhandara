@@ -6,27 +6,22 @@ export function useChat(userId: string) {
   useEffect(() => {
     if (!userId) return;
 
-    // open connection when hook mounts
     const ws = new WebSocket(`ws://localhost:3000?userId=${userId}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
-      console.log("✅ WebSocket connected as", userId);
     };
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("📩 Received:", data);
-      // here you can dispatch to Redux, setState, etc.
+      JSON.parse(event.data);
     };
 
     ws.onclose = () => {
-      console.log("❌ WebSocket disconnected");
       wsRef.current = null;
     };
 
     return () => {
-      ws.close(); // cleanup on unmount
+      ws.close();
     };
   }, [userId]);
 

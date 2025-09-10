@@ -33,11 +33,11 @@ function ChatWith() {
           <div className=" flex justify-between items-center w-full gap-3 absolute z-10 bottom-0 ">
             <input
               type="text"
-              className="border border-white py-1 w-full pl-3 text-white focus:outline-0 rounded-full"
+              className="border border-white py-3 w-full pl-3 text-white focus:outline-0 rounded-full"
               onChange={(e) => setText(e.target.value)}
             />
             <div
-              className="text-white bg-gray-800 p-2 rounded-full cursor-pointer"
+              className="text-white bg-gray-800 p-3 rounded-full w-fit cursor-pointer text-3xl"
               onClick={handleSend}
             >
               <IoSend />

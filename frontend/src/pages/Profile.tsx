@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OptionLayout from "../components/OptionLayout";
 import EditDetails from "../components/EditDetails";
 import Overlay from "../components/Overlay";
@@ -13,11 +13,18 @@ function Profile() {
   const posts = useSelector((state: any) => state.post.posts);
   const navigate = useNavigate()
 
-  const {getOnePost} = usePosts()
+  const {getOnePost, getUserPosts} = usePosts()
 
   async function handlePost(postId: string) {
     await getOnePost(postId)
   }
+
+  useEffect(() => {
+    async function fetch() {
+      await getUserPosts()
+    }
+    fetch()
+  }, [])
   
   return (
     <div className="">

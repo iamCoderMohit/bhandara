@@ -24,7 +24,7 @@ function EditDetails({setEdit}: {setEdit: React.Dispatch<boolean>}) {
     }
 
   return (
-    <div className="md:w-[30%] h-fit absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2  bg-gray-800 z-10 rounded-md p-5">
+    <div className="md:w-[30%] h-fit absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2  bg-gray-800 rounded-md p-5">
         {toast ? <Toast text={error || postError ? error || postError! : "successfully edited details"} icon={error || postError ? <IoIosWarning /> : <FaCheck />} setToast={setToast} status={error ? false : true} /> : null}
       <div className="text-white cursor-pointer absolute right-5 top-5 text-2xl"
       onClick={() => setEdit(false)}

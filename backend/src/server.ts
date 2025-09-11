@@ -15,7 +15,7 @@ const wss = new WebSocketServer({ server });
 const clients = new Map<string, WebSocket>();
 
 wss.on("connection", (ws, req) => {
-  const userId = new URL(req.url!, "http://localhost").searchParams.get(
+  const userId = new URL(req.url!, "https://bhandara-vqid.onrender.com").searchParams.get(
     "userId"
   )!;
   clients.set(userId, ws);

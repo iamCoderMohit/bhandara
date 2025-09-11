@@ -6,7 +6,7 @@ export function useChat(userId: string) {
   useEffect(() => {
     if (!userId) return;
 
-    const ws = new WebSocket(`ws://localhost:3000?userId=${userId}`);
+    const ws = new WebSocket(`wss://bhandara-vqid.onrender.com?userId=${userId}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
